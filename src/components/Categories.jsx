@@ -20,7 +20,7 @@ function Categories() {
         {categories.map((value, index) => {
           return (
             <button
-              key={index}
+              key={value}
               onClick={() => {
                 onClickCategory(index);
               }}
