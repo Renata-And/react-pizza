@@ -37,6 +37,7 @@ function Sort() {
             {sortList.map((item, index) => {
               return (
                 <li
+                  key={index}
                   onClick={() => onClickListHandler(index)}
                   className={selectedIndex === index ? 'active' : ''}
                 >
