@@ -6,8 +6,14 @@
 
   .container {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-betwen;
+
+    @media (max-width: 670px) {
+      justify-content: center;
+      gap: 30px;
+    }
   }
 
   &__logo {
