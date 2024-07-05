@@ -5,7 +5,7 @@ import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 
-function Home() {
+function Home({ searchValue }) {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
@@ -17,7 +17,6 @@ function Home() {
   });
 
   useEffect(() => {
-    console.log(sortName.order);
     setIsLoading(true);
     fetch(
       `https://667be4be3c30891b865a7892.mockapi.io/pizzas?category=${categoryId}&sortBy=${
@@ -32,6 +31,18 @@ function Home() {
     window.scrollTo(0, 0);
   }, [categoryId, sortName]);
 
+  const skeletonBlocks = [...new Array(6)].map((_, index) => (
+    <Skeleton key={index} />
+  ));
+  const pizzasBlocks = items
+    .filter((obj) => {
+      if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
+        return true;
+      }
+      return false;
+    })
+    .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+
   return (
     <div className='container'>
       <div className='content__top'>
@@ -43,9 +54,7 @@ function Home() {
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>
-        {isLoading
-          ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-          : items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
+        {isLoading ? skeletonBlocks : pizzasBlocks}
       </div>
     </div>
   );
