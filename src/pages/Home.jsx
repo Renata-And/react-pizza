@@ -4,11 +4,13 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
+import Pagination from '../components/Pagination';
 
 function Home({ searchValue }) {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortName, setSortName] = useState({
     id: 0,
     name: 'популярности ↓',
@@ -19,7 +21,7 @@ function Home({ searchValue }) {
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      `https://667be4be3c30891b865a7892.mockapi.io/pizzas?category=${categoryId}&sortBy=${
+      `https://667be4be3c30891b865a7892.mockapi.io/pizzas?page=${currentPage}&limit=4&category=${categoryId}&sortBy=${
         sortName.sortName
       }&title=${searchValue}&order=${
         sortName.order === 'desc' ? 'desc' : 'asc'
@@ -35,7 +37,7 @@ function Home({ searchValue }) {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortName, searchValue]);
+  }, [categoryId, sortName, searchValue, currentPage]);
 
   const skeletonBlocks = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
@@ -55,6 +57,7 @@ function Home({ searchValue }) {
       <div className='content__items'>
         {isLoading ? skeletonBlocks : pizzasBlocks}
       </div>
+      <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </div>
   );
 }
