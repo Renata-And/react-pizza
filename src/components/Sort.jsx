@@ -1,19 +1,23 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSort } from '../redux/slises/filterSlice';
 
-function Sort({ value, onChangeSort }) {
+const sortList = [
+  { id: 0, name: 'популярности ↓', sortName: 'rating', order: 'desc' },
+  { id: 1, name: 'популярности ↑', sortName: 'rating', order: 'asc' },
+  { id: 2, name: 'цене ↓', sortName: 'price', order: 'desc' },
+  { id: 3, name: 'цене ↑', sortName: 'price', order: 'asc' },
+  { id: 4, name: 'алфавиту ↓', sortName: 'title', order: 'asc' },
+  { id: 5, name: 'алфавиту ↑', sortName: 'title', order: 'desc' },
+];
+
+function Sort() {
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filter.sort);
   const [isVisible, setIsVisible] = useState(false);
 
-  const sortList = [
-    { id: 0, name: 'популярности ↓', sortName: 'rating', order: 'desc' },
-    { id: 1, name: 'популярности ↑', sortName: 'rating', order: 'asc' },
-    { id: 2, name: 'цене ↓', sortName: 'price', order: 'desc' },
-    { id: 3, name: 'цене ↑', sortName: 'price', order: 'asc' },
-    { id: 4, name: 'алфавиту ↓', sortName: 'title', order: 'asc' },
-    { id: 5, name: 'алфавиту ↑', sortName: 'title', order: 'desc' },
-  ];
-
-  const onClickListHandler = (index) => {
-    onChangeSort(index);
+  const onClickListHandler = (obj) => {
+    dispatch(setSort(obj));
     setIsVisible(false);
   };
 
@@ -34,18 +38,19 @@ function Sort({ value, onChangeSort }) {
         </svg>
         <b>Сортировка по:</b>
         <span onClick={() => setIsVisible((visible) => !visible)}>
-          {value.name}
+          {sort.name}
         </span>
       </div>
       {isVisible && (
         <div className='sort__popup'>
           <ul>
             {sortList.map((obj, index) => {
+              console.log(obj);
               return (
                 <li
                   key={index}
                   onClick={() => onClickListHandler(obj)}
-                  className={value.id === index ? 'active' : ''}
+                  className={sort.id === index ? 'active' : ''}
                 >
                   {obj.name}
                 </li>
